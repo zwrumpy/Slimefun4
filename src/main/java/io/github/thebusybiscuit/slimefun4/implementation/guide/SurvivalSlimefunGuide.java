@@ -72,9 +72,11 @@ public class SurvivalSlimefunGuide implements SlimefunGuideImplementation {
     private final int[] recipeSlots = { 3, 4, 5, 12, 13, 14, 21, 22, 23 };
     private final ItemStack item;
     private final boolean showVanillaRecipes;
+    private final boolean showHiddenItemGroupsInSearch;
 
-    public SurvivalSlimefunGuide(boolean showVanillaRecipes) {
+    public SurvivalSlimefunGuide(boolean showVanillaRecipes, boolean showHiddenItemGroupsInSearch) {
         this.showVanillaRecipes = showVanillaRecipes;
+        this.showHiddenItemGroupsInSearch = showHiddenItemGroupsInSearch;
         item = new SlimefunGuideItem(this, "&aSlimefun Guide &7(Chest GUI)");
     }
 
@@ -358,7 +360,7 @@ public class SurvivalSlimefunGuide implements SlimefunGuideImplementation {
                 break;
             }
 
-            if (!slimefunItem.isHidden() && isSearchFilterApplicable(slimefunItem, searchTerm)) {
+            if (!slimefunItem.isHidden() && isItemGroupAccessible(p, slimefunItem) && isSearchFilterApplicable(slimefunItem, searchTerm)) {
                 ItemStack itemstack = new CustomItemStack(slimefunItem.getItem(), meta -> {
                     ItemGroup itemGroup = slimefunItem.getItemGroup();
                     meta.setLore(Arrays.asList("", ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE + itemGroup.getDisplayName(p)));
@@ -385,6 +387,11 @@ public class SurvivalSlimefunGuide implements SlimefunGuideImplementation {
         }
 
         menu.open(p);
+    }
+
+    @ParametersAreNonnullByDefault
+    private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
+        return showHiddenItemGroupsInSearch || slimefunItem.getItemGroup().isAccessible(p);
     }
 
     @ParametersAreNonnullByDefault
