@@ -62,6 +62,7 @@ public abstract class GPSTransmitter extends SimpleSlimefunItem<BlockTicker> imp
             @Override
             public void onPlayerBreak(BlockBreakEvent e, ItemStack item, List<ItemStack> drops) {
                 Location l = e.getBlock().getLocation();
+                if (BlockStorage.getLocationInfo(l, "owner") == null) return;
                 UUID owner = UUID.fromString(BlockStorage.getLocationInfo(l, "owner"));
                 Slimefun.getGPSNetwork().updateTransmitter(l, owner, false);
             }
