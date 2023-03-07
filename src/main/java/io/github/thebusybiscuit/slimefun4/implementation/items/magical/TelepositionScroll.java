@@ -54,5 +54,4 @@ public class TelepositionScroll extends SimpleSlimefunItem<ItemUseHandler> {
             }
         };
     }
-
 }

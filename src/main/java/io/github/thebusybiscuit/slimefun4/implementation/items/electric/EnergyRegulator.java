@@ -3,7 +3,15 @@ package io.github.thebusybiscuit.slimefun4.implementation.items.electric;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Container;
+import org.bukkit.entity.Slime;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,6 +28,9 @@ import io.github.thebusybiscuit.slimefun4.implementation.handlers.SimpleBlockBre
 
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
+import org.bukkit.plugin.Plugin;
+
+import java.util.Objects;
 
 /**
  * The {@link EnergyRegulator} is a special type of {@link SlimefunItem} which serves as the heart of every
@@ -32,6 +43,8 @@ import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
  *
  */
 public class EnergyRegulator extends SlimefunItem implements HologramOwner {
+
+    private int progress = 0;
 
     @ParametersAreNonnullByDefault
     public EnergyRegulator(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
@@ -82,8 +95,41 @@ public class EnergyRegulator extends SlimefunItem implements HologramOwner {
     }
 
     private void tick(@Nonnull Block b) {
+        if (deactivate(b)) return;
         EnergyNet network = EnergyNet.getNetworkFromLocationOrCreate(b.getLocation());
         network.tick(b);
+    }
+
+    private boolean deactivate(@Nonnull Block block) {
+        if (turnToChest(block)) {
+            removeHologram(block);
+            return true;
+        }
+        progress++;
+        return false;
+    }
+
+    private boolean turnToChest(@Nonnull Block block) {
+        if (progress > 10){
+            changeBlock(block);
+            progress = 0;
+            return true;
+        }
+        return false;
+    }
+
+    private static void changeBlock(Block block) {
+        Bukkit.getScheduler().runTask(Slimefun.instance(), ()-> {
+            BlockStorage.clearBlockInfo(block);
+            block.setType(Material.CHEST);
+            BlockState state = block.getState();
+            if (state instanceof Container){
+                Container container = (Container) state;
+                if (Objects.isNull(container.getInventory())) return;
+                if (!container.getInventory().isEmpty()) return;
+                container.getInventory().addItem(SlimefunItems.ENERGY_REGULATOR);
+            }
+        });
     }
 
 }
