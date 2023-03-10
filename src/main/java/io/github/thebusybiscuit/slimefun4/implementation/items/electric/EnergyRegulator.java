@@ -5,8 +5,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.utils.Cooldown;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -100,36 +102,28 @@ public class EnergyRegulator extends SlimefunItem implements HologramOwner {
         network.tick(b);
     }
 
-    private boolean deactivate(@Nonnull Block block) {
-        if (turnToChest(block)) {
-            removeHologram(block);
-            return true;
-        }
-        progress++;
+    Cooldown cd = new Cooldown();
+    int cooldown = 21600;
+
+    private boolean deactivate(Block block) {
+        if (!cd.onCooldown(block, cooldown))  return true;
+        if (cd.getTimeLeft(block) > 0) return true;
+        Bukkit.getScheduler().runTask(Slimefun.instance(), () ->
+                replaceBlock(block, SlimefunItems.ENERGY_REGULATOR)
+        );
         return false;
     }
 
-    private boolean turnToChest(@Nonnull Block block) {
-        if (progress > 10){
-            changeBlock(block);
-            progress = 0;
-            return true;
+    private static void replaceBlock(Block block, SlimefunItemStack stack) {
+        BlockStorage.clearBlockInfo(block);
+        block.setType(Material.CHEST);
+        BlockState state = block.getState();
+        if (state instanceof Container) {
+            Container container = (Container) state;
+            if (Objects.isNull(container.getInventory())) return;
+            if (!container.getInventory().isEmpty()) return;
+            container.getInventory().addItem(stack);
         }
-        return false;
-    }
-
-    private static void changeBlock(Block block) {
-        Bukkit.getScheduler().runTask(Slimefun.instance(), ()-> {
-            BlockStorage.clearBlockInfo(block);
-            block.setType(Material.CHEST);
-            BlockState state = block.getState();
-            if (state instanceof Container){
-                Container container = (Container) state;
-                if (Objects.isNull(container.getInventory())) return;
-                if (!container.getInventory().isEmpty()) return;
-                container.getInventory().addItem(SlimefunItems.ENERGY_REGULATOR);
-            }
-        });
     }
 
 }
