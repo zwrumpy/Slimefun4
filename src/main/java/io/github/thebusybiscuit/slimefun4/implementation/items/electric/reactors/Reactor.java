@@ -310,15 +310,16 @@ public abstract class Reactor extends AbstractEnergyProvider implements Hologram
 
         int space = getCapacity() - charge;
 
+
+        if (needsCooling() && !hasEnoughCoolant(l, inv, accessPort, operation)) {
+            //explosionsQueue.add(l);
+            return 0;
+        }
+
         if (space >= produced || getReactorMode(l) != ReactorMode.GENERATOR) {
             operation.addProgress(1);
             checkForWaterBlocks(l);
             processor.updateProgressBar(inv, 22, operation);
-
-            if (needsCooling() && !hasEnoughCoolant(l, inv, accessPort, operation)) {
-                explosionsQueue.add(l);
-                return 0;
-            }
         }
 
         if (space >= produced) {
@@ -334,10 +335,10 @@ public abstract class Reactor extends AbstractEnergyProvider implements Hologram
 
         if (explosion) {
             Slimefun.runSync(() -> {
-                ReactorExplodeEvent event = new ReactorExplodeEvent(l, Reactor.this);
-                Bukkit.getPluginManager().callEvent(event);
+                //ReactorExplodeEvent event = new ReactorExplodeEvent(l, Reactor.this);
+                //Bukkit.getPluginManager().callEvent(event);
 
-                BlockStorage.getInventory(l).close();
+                //BlockStorage.getInventory(l).close();
                 removeHologram(l.getBlock());
             });
 

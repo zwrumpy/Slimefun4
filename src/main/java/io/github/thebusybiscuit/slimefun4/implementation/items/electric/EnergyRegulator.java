@@ -37,9 +37,9 @@ import java.util.Objects;
 /**
  * The {@link EnergyRegulator} is a special type of {@link SlimefunItem} which serves as the heart of every
  * {@link EnergyNet}.
- * 
+ *
  * @author TheBusyBiscuit
- * 
+ *
  * @see EnergyNet
  * @see EnergyNetComponent
  *
@@ -96,26 +96,30 @@ public class EnergyRegulator extends SlimefunItem implements HologramOwner {
         });
     }
 
-    private void tick(@Nonnull Block b) {
-        if (deactivate(b)) return;
-        EnergyNet network = EnergyNet.getNetworkFromLocationOrCreate(b.getLocation());
-        network.tick(b);
-    }
-
     Cooldown cd = new Cooldown();
     int cooldown = 21600;
+    //int cooldown = 10;
 
-    private boolean deactivate(Block block) {
-        if (!cd.onCooldown(block, cooldown))  return true;
-        if (cd.getTimeLeft(block) > 0) return true;
-        Bukkit.getScheduler().runTask(Slimefun.instance(), () ->
-                replaceBlock(block, SlimefunItems.ENERGY_REGULATOR)
+    private void tick(@Nonnull Block block) {
+        EnergyNet network = EnergyNet.getNetworkFromLocationOrCreate(block.getLocation());
+        network.tick(block);
+        turnOff(block);
+    }
+
+    private void turnOff(Block block) {
+        if (!cd.onCooldown(block, cooldown))  return;
+        if (cd.getTimeLeft(block) > 0) return;
+        Bukkit.getScheduler().runTask(Slimefun.instance(), () -> {
+                    removeHologram(block);
+                    replaceBlock(block, SlimefunItems.ENERGY_REGULATOR);
+                }
         );
-        return false;
+
     }
 
     private static void replaceBlock(Block block, SlimefunItemStack stack) {
         BlockStorage.clearBlockInfo(block);
+
         block.setType(Material.CHEST);
         BlockState state = block.getState();
         if (state instanceof Container) {
@@ -125,5 +129,4 @@ public class EnergyRegulator extends SlimefunItem implements HologramOwner {
             container.getInventory().addItem(stack);
         }
     }
-
 }

@@ -221,13 +221,14 @@ public class EnergyNet extends Network implements HologramOwner {
                 }
 
                 if (provider.willExplode(loc, data)) {
-                    explodedBlocks.add(loc);
-                    BlockStorage.clearBlockInfo(loc);
-
-                    Slimefun.runSync(() -> {
-                        loc.getBlock().setType(Material.LAVA);
-                        loc.getWorld().createExplosion(loc, 0F, false);
-                    });
+                    return 0;
+//                    explodedBlocks.add(loc);
+//                    BlockStorage.clearBlockInfo(loc);
+//
+//                    Slimefun.runSync(() -> {
+//                        loc.getBlock().setType(Material.LAVA);
+//                        loc.getWorld().createExplosion(loc, 0F, false);
+//                    });
                 } else {
                     supply += energy;
                 }
