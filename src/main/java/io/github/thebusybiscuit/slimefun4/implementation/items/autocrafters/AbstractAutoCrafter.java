@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -160,7 +161,18 @@ public abstract class AbstractAutoCrafter extends SlimefunItem implements Energy
      * @param data
      *            The data stored on this block
      */
-    protected void tick(@Nonnull Block b, @Nonnull Config data) {
+
+    int progressTicks = 0;
+    int progressTime = 10;
+
+    public void tick(@Nonnull Block b, @Nonnull Config data) {
+        if (progressTicks >= progressTime) {
+            update(b, data);
+            progressTicks = 0;
+        } else progressTicks++;
+    }
+
+    protected void update(@Nonnull Block b, @Nonnull Config data) {
         AbstractRecipe recipe = getSelectedRecipe(b);
 
         if (recipe == null || !recipe.isEnabled() || getCharge(b.getLocation(), data) < getEnergyConsumption()) {
@@ -187,6 +199,8 @@ public abstract class AbstractAutoCrafter extends SlimefunItem implements Energy
             }
         }
     }
+
+
 
     /**
      * This method checks if the given {@link Block} has a valid {@link Inventory}

@@ -1,4 +1,4 @@
-package io.github.thebusybiscuit.slimefun4.implementation.items.seasonal;
+package io.github.thebusybiscuit.slimefun4.implementation.items.food.seasonal;
 
 import java.util.concurrent.ThreadLocalRandom;
 

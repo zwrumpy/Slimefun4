@@ -183,8 +183,8 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.multiblocks.Smelt
 import io.github.thebusybiscuit.slimefun4.implementation.items.multiblocks.TableSaw;
 import io.github.thebusybiscuit.slimefun4.implementation.items.multiblocks.miner.AdvancedIndustrialMiner;
 import io.github.thebusybiscuit.slimefun4.implementation.items.multiblocks.miner.IndustrialMiner;
-import io.github.thebusybiscuit.slimefun4.implementation.items.seasonal.ChristmasPresent;
-import io.github.thebusybiscuit.slimefun4.implementation.items.seasonal.EasterEgg;
+import io.github.thebusybiscuit.slimefun4.implementation.items.food.seasonal.ChristmasPresent;
+import io.github.thebusybiscuit.slimefun4.implementation.items.food.seasonal.EasterEgg;
 import io.github.thebusybiscuit.slimefun4.implementation.items.teleporter.PersonalActivationPlate;
 import io.github.thebusybiscuit.slimefun4.implementation.items.teleporter.PortableTeleporter;
 import io.github.thebusybiscuit.slimefun4.implementation.items.teleporter.SharedActivationPlate;
