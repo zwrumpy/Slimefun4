@@ -9,7 +9,7 @@
 
     <!-- Our default version will be UNOFFICIAL, this will prevent auto updates -->
     <!-- from overriding our local test file -->
-    <version>CH 0.21.0</version>
+    <version>CH 0.23.0</version>
     <inceptionYear>2013</inceptionYear>
     <packaging>jar</packaging>
 
