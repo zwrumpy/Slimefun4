@@ -17,10 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Skull;
+import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -264,16 +261,16 @@ public abstract class AbstractAutoCrafter extends SlimefunItem implements Energy
         BlockStateSnapshotResult result = PaperLib.getBlockState(b, false);
         BlockState state = result.getState();
 
-        if (state instanceof Skull skull) {
+        if (state instanceof BlastFurnace blastFurnace) {
             if (recipe == null) {
                 // Clear the value from persistent data storage
-                PersistentDataAPI.remove(skull, recipeStorageKey);
+                PersistentDataAPI.remove(blastFurnace, recipeStorageKey);
 
                 // Also remove the "enabled" state since this should be per-recipe.
-                PersistentDataAPI.remove(skull, recipeEnabledKey);
+                PersistentDataAPI.remove(blastFurnace, recipeEnabledKey);
             } else {
                 // Store the value to persistent data storage
-                PersistentDataAPI.setString(skull, recipeStorageKey, recipe.toString());
+                PersistentDataAPI.setString(blastFurnace, recipeStorageKey, recipe.toString());
             }
 
             // Fixes #2899 - Update the BlockState if necessary
@@ -349,13 +346,12 @@ public abstract class AbstractAutoCrafter extends SlimefunItem implements Energy
         p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
         BlockState state = PaperLib.getBlockState(b, false).getState();
 
-        // Make sure the block is still a Skull
-        if (state instanceof Skull skull) {
+        if (state instanceof BlastFurnace blastFurnace) {
             if (enabled) {
-                PersistentDataAPI.remove(skull, recipeEnabledKey);
+                PersistentDataAPI.remove(blastFurnace, recipeEnabledKey);
                 Slimefun.getLocalization().sendMessage(p, "messages.auto-crafting.re-enabled");
             } else {
-                PersistentDataAPI.setByte(skull, recipeEnabledKey, (byte) 1);
+                PersistentDataAPI.setByte(blastFurnace, recipeEnabledKey, (byte) 1);
                 Slimefun.getLocalization().sendMessage(p, "messages.auto-crafting.temporarily-disabled");
             }
         }
