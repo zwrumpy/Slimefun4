@@ -13,10 +13,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
-import org.bukkit.block.BlastFurnace;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Skull;
+import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -62,9 +59,9 @@ public class VanillaAutoCrafter extends AbstractAutoCrafter {
     public @Nullable AbstractRecipe getSelectedRecipe(@Nonnull Block b) {
         BlockState state = PaperLib.getBlockState(b, false).getState();
 
-        if (state instanceof BlastFurnace blastFurnace) {
+        if (state instanceof BrewingStand crafter) {
             // Read the stored value from persistent data storage
-            PersistentDataContainer container = blastFurnace.getPersistentDataContainer();
+            PersistentDataContainer container = crafter.getPersistentDataContainer();
             String value = container.get(recipeStorageKey, PersistentDataType.STRING);
 
             if (value != null) {

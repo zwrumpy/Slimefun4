@@ -261,16 +261,16 @@ public abstract class AbstractAutoCrafter extends SlimefunItem implements Energy
         BlockStateSnapshotResult result = PaperLib.getBlockState(b, false);
         BlockState state = result.getState();
 
-        if (state instanceof BlastFurnace blastFurnace) {
+        if (state instanceof BrewingStand crafter) {
             if (recipe == null) {
                 // Clear the value from persistent data storage
-                PersistentDataAPI.remove(blastFurnace, recipeStorageKey);
+                PersistentDataAPI.remove(crafter, recipeStorageKey);
 
                 // Also remove the "enabled" state since this should be per-recipe.
-                PersistentDataAPI.remove(blastFurnace, recipeEnabledKey);
+                PersistentDataAPI.remove(crafter, recipeEnabledKey);
             } else {
                 // Store the value to persistent data storage
-                PersistentDataAPI.setString(blastFurnace, recipeStorageKey, recipe.toString());
+                PersistentDataAPI.setString(crafter, recipeStorageKey, recipe.toString());
             }
 
             // Fixes #2899 - Update the BlockState if necessary
@@ -346,12 +346,12 @@ public abstract class AbstractAutoCrafter extends SlimefunItem implements Energy
         p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
         BlockState state = PaperLib.getBlockState(b, false).getState();
 
-        if (state instanceof BlastFurnace blastFurnace) {
+        if (state instanceof BrewingStand crafter) {
             if (enabled) {
-                PersistentDataAPI.remove(blastFurnace, recipeEnabledKey);
+                PersistentDataAPI.remove(crafter, recipeEnabledKey);
                 Slimefun.getLocalization().sendMessage(p, "messages.auto-crafting.re-enabled");
             } else {
-                PersistentDataAPI.setByte(blastFurnace, recipeEnabledKey, (byte) 1);
+                PersistentDataAPI.setByte(crafter, recipeEnabledKey, (byte) 1);
                 Slimefun.getLocalization().sendMessage(p, "messages.auto-crafting.temporarily-disabled");
             }
         }
