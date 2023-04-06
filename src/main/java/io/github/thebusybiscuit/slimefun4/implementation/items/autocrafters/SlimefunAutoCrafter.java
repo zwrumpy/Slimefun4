@@ -8,6 +8,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.BlastFurnace;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
@@ -60,9 +61,9 @@ public class SlimefunAutoCrafter extends AbstractAutoCrafter {
 
         BlockState state = PaperLib.getBlockState(b, false).getState();
 
-        if (state instanceof Skull skull) {
+        if (state instanceof BlastFurnace blastFurnace) {
             // Read the stored value from persistent data storage
-            PersistentDataContainer container = skull.getPersistentDataContainer();
+            PersistentDataContainer container = blastFurnace.getPersistentDataContainer();
             String value = container.get(recipeStorageKey, PersistentDataType.STRING);
             SlimefunItem item = SlimefunItem.getById(value);
 
