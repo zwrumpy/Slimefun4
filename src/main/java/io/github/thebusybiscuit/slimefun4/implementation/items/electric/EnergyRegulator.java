@@ -46,7 +46,8 @@ import java.util.Objects;
  */
 public class EnergyRegulator extends SlimefunItem implements HologramOwner {
 
-    private int progress = 0;
+    Cooldown cd = new Cooldown();
+    int cooldown = 21600;
 
     @ParametersAreNonnullByDefault
     public EnergyRegulator(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
@@ -96,10 +97,6 @@ public class EnergyRegulator extends SlimefunItem implements HologramOwner {
         });
     }
 
-    Cooldown cd = new Cooldown();
-    int cooldown = 21600;
-    //int cooldown = 10;
-
     private void tick(@Nonnull Block block) {
         EnergyNet network = EnergyNet.getNetworkFromLocationOrCreate(block.getLocation());
         network.tick(block);
@@ -109,17 +106,15 @@ public class EnergyRegulator extends SlimefunItem implements HologramOwner {
     private void turnOff(Block block) {
         if (!cd.onCooldown(block, cooldown))  return;
         if (cd.getTimeLeft(block) > 0) return;
+        BlockStorage.clearBlockInfo(block);
         Bukkit.getScheduler().runTask(Slimefun.instance(), () -> {
                     removeHologram(block);
                     replaceBlock(block, SlimefunItems.ENERGY_REGULATOR);
                 }
         );
-
     }
 
     private static void replaceBlock(Block block, SlimefunItemStack stack) {
-        BlockStorage.clearBlockInfo(block);
-
         block.setType(Material.CHEST);
         BlockState state = block.getState();
         if (state instanceof Container) {
