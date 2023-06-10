@@ -98,6 +98,16 @@ public class OreWasher extends MultiBlockMachine {
                 if (input != null) {
                     if (SlimefunUtils.isItemSimilar(input, SlimefunItems.SIFTED_ORE, true)) {
                         ItemStack output = getRandomDust();
+
+                        if(p.isSneaking()) {
+                            for (ItemStack i : dusts) {
+                                if (SlimefunUtils.isItemSimilar(input, i, true)) {
+                                    output = i;
+                                    break;
+                                }
+                            }
+                        }
+
                         Inventory outputInv = null;
 
                         if (!legacyMode) {

@@ -186,7 +186,7 @@ public class EnergyNet extends Network implements HologramOwner {
         for (Map.Entry<Location, EnergyNetProvider> entry : generators.entrySet()) {
             Location loc = entry.getKey();
             EnergyNetProvider component = entry.getValue();
-            int capacity = component.getCapacity();
+            long capacity = component.getCapacity();
 
             if (remainingEnergy > 0) {
                 if (remainingEnergy > capacity) {
