@@ -30,7 +30,7 @@ import io.papermc.lib.PaperLib;
 /**
  * The {@link OreWasher} is a special {@link MultiBlockMachine} which allows you to
  * turn Sifted Ore into ore dusts.
- * 
+ *
  * @author TheBusyBiscuit
  * @author Sfiguz7
  *
@@ -39,15 +39,15 @@ public class OreWasher extends MultiBlockMachine {
 
     // @formatter:off
     private final ItemStack[] dusts = new ItemStack[] {
-        SlimefunItems.IRON_DUST,
-        SlimefunItems.GOLD_DUST,
-        SlimefunItems.COPPER_DUST,
-        SlimefunItems.TIN_DUST,
-        SlimefunItems.ZINC_DUST,
-        SlimefunItems.ALUMINUM_DUST,
-        SlimefunItems.MAGNESIUM_DUST,
-        SlimefunItems.LEAD_DUST,
-        SlimefunItems.SILVER_DUST
+            SlimefunItems.IRON_DUST,
+            SlimefunItems.GOLD_DUST,
+            SlimefunItems.COPPER_DUST,
+            SlimefunItems.TIN_DUST,
+            SlimefunItems.ZINC_DUST,
+            SlimefunItems.ALUMINUM_DUST,
+            SlimefunItems.MAGNESIUM_DUST,
+            SlimefunItems.LEAD_DUST,
+            SlimefunItems.SILVER_DUST
     };
     // @formatter:on
 
@@ -57,9 +57,9 @@ public class OreWasher extends MultiBlockMachine {
     public OreWasher(ItemGroup itemGroup, SlimefunItemStack item) {
         // @formatter:off
         super(itemGroup, item, new ItemStack[] {
-            null, new ItemStack(Material.DISPENSER), null,
-            null, new ItemStack(Material.OAK_FENCE), null,
-            null, new ItemStack(Material.CAULDRON), null
+                null, new ItemStack(Material.DISPENSER), null,
+                null, new ItemStack(Material.OAK_FENCE), null,
+                null, new ItemStack(Material.CAULDRON), null
         }, BlockFace.SELF);
         // @formatter:on
 
@@ -100,10 +100,18 @@ public class OreWasher extends MultiBlockMachine {
                         ItemStack output = getRandomDust();
 
                         if(p.isSneaking()) {
-                            for (ItemStack i : dusts) {
-                                if (SlimefunUtils.isItemSimilar(input, i, true)) {
-                                    output = i;
-                                    break;
+                            for (int slot = 0; slot < 9; slot++) {
+                                if (inv.getItem(slot) == null) continue;
+                                if (inv.getItem(slot).getType() == Material.AIR) continue;
+                                for (ItemStack i : dusts) {
+                                    if (inv.getItem(slot)
+                                            .getItemMeta()
+                                            .getDisplayName()
+                                            .equalsIgnoreCase(i.getItemMeta()
+                                                    .getDisplayName())) {
+                                        output = i;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -171,7 +179,7 @@ public class OreWasher extends MultiBlockMachine {
 
     /**
      * This returns a random dust item from Slimefun.
-     * 
+     *
      * @return A randomly picked dust item
      */
     public @Nonnull ItemStack getRandomDust() {
