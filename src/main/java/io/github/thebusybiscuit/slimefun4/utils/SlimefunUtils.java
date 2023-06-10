@@ -440,6 +440,13 @@ public final class SlimefunUtils {
         Slimefun.runSync(new CapacitorTextureUpdateTask(l, charge, capacity));
     }
 
+    public static void updateCapacitorTexture(@Nonnull Location l, long charge, long capacity) {
+        Validate.notNull(l, "Cannot update a texture for null");
+        Validate.isTrue(capacity > 0, "Capacity must be greater than zero!");
+
+        Slimefun.runSync(new CapacitorTextureUpdateTask(l, charge, capacity));
+    }
+
     /**
      * This checks whether the {@link Player} is able to use the given {@link ItemStack}.
      * It will always return <code>true</code> for non-Slimefun items.

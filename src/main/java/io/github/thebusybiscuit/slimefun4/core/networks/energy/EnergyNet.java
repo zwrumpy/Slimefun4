@@ -129,18 +129,18 @@ public class EnergyNet extends Network implements HologramOwner {
         if (connectorNodes.isEmpty() && terminusNodes.isEmpty()) {
             updateHologram(b, "&4No Energy Network found");
         } else {
-            int supply = tickAllGenerators(timestamp::getAndAdd) + tickAllCapacitors();
-            int remainingEnergy = supply;
-            int demand = 0;
+            long supply = tickAllGenerators(timestamp::getAndAdd) + tickAllCapacitors();
+            long remainingEnergy = supply;
+            long demand = 0;
 
             for (Map.Entry<Location, EnergyNetComponent> entry : consumers.entrySet()) {
                 Location loc = entry.getKey();
                 EnergyNetComponent component = entry.getValue();
-                int capacity = component.getCapacity();
-                int charge = component.getCharge(loc);
+                long capacity = component.getCapacity();
+                long charge = component.getCharge(loc);
 
                 if (charge < capacity) {
-                    int availableSpace = capacity - charge;
+                    long availableSpace = capacity - charge;
                     demand += availableSpace;
 
                     if (remainingEnergy > 0) {
@@ -163,13 +163,13 @@ public class EnergyNet extends Network implements HologramOwner {
         Slimefun.getProfiler().closeEntry(b.getLocation(), SlimefunItems.ENERGY_REGULATOR.getItem(), timestamp.get());
     }
 
-    private void storeRemainingEnergy(int remainingEnergy) {
+    private void storeRemainingEnergy(long remainingEnergy) {
         for (Map.Entry<Location, EnergyNetComponent> entry : capacitors.entrySet()) {
             Location loc = entry.getKey();
             EnergyNetComponent component = entry.getValue();
 
             if (remainingEnergy > 0) {
-                int capacity = component.getCapacity();
+                long capacity = component.getCapacity();
 
                 if (remainingEnergy > capacity) {
                     component.setCharge(loc, capacity);
@@ -222,13 +222,6 @@ public class EnergyNet extends Network implements HologramOwner {
 
                 if (provider.willExplode(loc, data)) {
                     return 0;
-//                    explodedBlocks.add(loc);
-//                    BlockStorage.clearBlockInfo(loc);
-//
-//                    Slimefun.runSync(() -> {
-//                        loc.getBlock().setType(Material.LAVA);
-//                        loc.getWorld().createExplosion(loc, 0F, false);
-//                    });
                 } else {
                     supply += energy;
                 }

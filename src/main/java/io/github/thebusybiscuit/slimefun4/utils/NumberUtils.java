@@ -262,6 +262,16 @@ public final class NumberUtils {
         }
     }
 
+    public static long clamp(long min, long value, long max) {
+        if (value < min) {
+            return min;
+        } else if (value > max) {
+            return max;
+        } else {
+            return value;
+        }
+    }
+
     public static int getJavaVersion() {
         String javaVer = System.getProperty("java.version");
 
