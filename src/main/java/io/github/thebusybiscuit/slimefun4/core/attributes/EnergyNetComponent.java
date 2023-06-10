@@ -251,5 +251,4 @@ public interface EnergyNetComponent extends ItemAttribute {
             Slimefun.logger().log(Level.SEVERE, x, () -> "Exception while trying to remove an energy-charge for \"" + getId() + "\" at " + new BlockPosition(l));
         }
     }
-
 }

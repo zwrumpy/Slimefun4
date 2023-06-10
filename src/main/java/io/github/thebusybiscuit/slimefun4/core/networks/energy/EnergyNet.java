@@ -202,9 +202,9 @@ public class EnergyNet extends Network implements HologramOwner {
         }
     }
 
-    private int tickAllGenerators(@Nonnull LongConsumer timings) {
+    private long tickAllGenerators(@Nonnull LongConsumer timings) {
         Set<Location> explodedBlocks = new HashSet<>();
-        int supply = 0;
+        long supply = 0;
 
         for (Map.Entry<Location, EnergyNetProvider> entry : generators.entrySet()) {
             long timestamp = Slimefun.getProfiler().newEntry();
@@ -214,7 +214,7 @@ public class EnergyNet extends Network implements HologramOwner {
 
             try {
                 Config data = BlockStorage.getLocationInfo(loc);
-                int energy = provider.getGeneratedOutput(loc, data);
+                long energy = provider.getGeneratedOutput(loc, data);
 
                 if (provider.isChargeable()) {
                     energy += provider.getCharge(loc, data);
@@ -242,8 +242,8 @@ public class EnergyNet extends Network implements HologramOwner {
         return supply;
     }
 
-    private int tickAllCapacitors() {
-        int supply = 0;
+    private long tickAllCapacitors() {
+        long supply = 0;
 
         for (Map.Entry<Location, EnergyNetComponent> entry : capacitors.entrySet()) {
             supply += entry.getValue().getCharge(entry.getKey());
